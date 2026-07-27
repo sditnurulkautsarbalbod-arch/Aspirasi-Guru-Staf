@@ -1,20 +1,60 @@
 import express from 'express';
 import path from 'path';
 import { createServer as createViteServer } from 'vite';
-import { getRequestListener } from '@hono/node-server';
 import app from './server/index.js';
 
 async function startServer() {
   const server = express();
   const PORT = 3000;
 
-  // Hono API request listener handling all /api requests
-  const listener = getRequestListener(app.fetch);
-  server.use((req, res, next) => {
-    if (req.url && (req.url === '/api' || req.url.startsWith('/api/'))) {
-      return listener(req, res);
+  // Handle all API requests with Hono
+  server.all('/api*', async (req, res) => {
+    try {
+      const protocol = req.headers['x-forwarded-proto'] || req.protocol || 'http';
+      const host = req.headers['x-forwarded-host'] || req.headers.host || 'localhost:3000';
+      const fullUrl = `${protocol}://${host}${req.originalUrl || req.url}`;
+
+      const headers = new Headers();
+      for (const [key, val] of Object.entries(req.headers)) {
+        if (!val) continue;
+        if (key.toLowerCase() === 'content-length') continue;
+        if (Array.isArray(val)) {
+          val.forEach((v) => headers.append(key, v));
+        } else {
+          headers.append(key, val);
+        }
+      }
+
+      let body: any = undefined;
+      if (['POST', 'PUT', 'PATCH', 'DELETE'].includes(req.method)) {
+        const chunks: Buffer[] = [];
+        for await (const chunk of req) {
+          chunks.push(typeof chunk === 'string' ? Buffer.from(chunk) : chunk);
+        }
+        if (chunks.length > 0) {
+          body = Buffer.concat(chunks);
+        }
+      }
+
+      const fetchReq = new Request(fullUrl, {
+        method: req.method,
+        headers,
+        body,
+      });
+
+      const response = await app.fetch(fetchReq);
+
+      res.status(response.status);
+      response.headers.forEach((val, key) => {
+        res.setHeader(key, val);
+      });
+
+      const arrayBuffer = await response.arrayBuffer();
+      res.send(Buffer.from(arrayBuffer));
+    } catch (err) {
+      console.error('Express-Hono API Handler error:', err);
+      res.status(500).json({ success: false, error: 'Terjadi kesalahan internal pada server API.' });
     }
-    next();
   });
 
   server.use(express.json());
