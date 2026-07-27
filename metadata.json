@@ -1,0 +1,6 @@
+{
+  "name": "Aspirasi & Umpan Balik Internal SD IT Nurul Kautsar",
+  "description": "Ruang aspirasi dan umpan balik internal anonim bagi guru dan staf SD IT Nurul Kautsar.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
