@@ -7,6 +7,13 @@ import wakasekApi from './routes/wakasek.js';
 import kepalaSekolahApi from './routes/kepalaSekolah.js';
 
 const app = new Hono().basePath('/api');
+app.get('/health', (c) => {
+  return c.json({
+    success: true,
+    message: 'API Hono berhasil berjalan',
+    timestamp: new Date().toISOString(),
+  });
+});
 
 // CORS configuration
 app.use('*', cors({
