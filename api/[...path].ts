@@ -1,5 +1,14 @@
+import { Hono } from 'hono';
 import { handle } from 'hono/vercel';
-import app from '../server/index';
+
+const app = new Hono();
+
+app.get('/api/health', (c) => {
+  return c.json({
+    success: true,
+    message: 'Vercel + Hono berhasil berjalan',
+  });
+});
 
 export const GET = handle(app);
 export const POST = handle(app);
