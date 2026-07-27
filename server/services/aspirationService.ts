@@ -1,5 +1,5 @@
-import { memoryDb, isNeonConfigured, db } from '../db';
-import { aspirations, users, audit_logs } from '../db/schema';
+import { memoryDb, isNeonConfigured, db } from '../db/index.js';
+import { aspirations, users, audit_logs } from '../db/schema.js';
 import { eq, and, isNull, ilike, gte, lte, desc, count, sql, inArray } from 'drizzle-orm';
 import * as XLSX from 'xlsx';
 

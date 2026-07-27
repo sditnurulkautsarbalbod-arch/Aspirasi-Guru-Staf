@@ -1,5 +1,5 @@
 import { Hono } from 'hono';
-import { authMiddleware, requireRole, Env } from '../middleware/auth';
+import { authMiddleware, requireRole, Env } from '../middleware/auth.js';
 import {
   fetchAspirations,
   fetchAspirationById,
@@ -7,7 +7,7 @@ import {
   deleteBulkAspirations,
   deleteAllAspirations,
   exportAspirationsToExcel,
-} from '../services/aspirationService';
+} from '../services/aspirationService.js';
 
 const kepalaSekolah = new Hono<Env>();
 
