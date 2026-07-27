@@ -7,6 +7,14 @@ import wakasekApi from './routes/wakasek.js';
 import kepalaSekolahApi from './routes/kepalaSekolah.js';
 
 const app = new Hono().basePath('/api');
+
+app.get('/health', (c) => {
+  return c.json({
+    success: true,
+    message: 'Backend server/index berhasil dimuat',
+  });
+});
+
 app.get('/health', (c) => {
   return c.json({
     success: true,
