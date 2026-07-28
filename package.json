@@ -12,7 +12,7 @@
     "lint": "tsc --noEmit",
     "db:generate": "drizzle-kit generate",
     "db:push": "drizzle-kit push",
-    "db:seed": "tsx server/db/seed.ts"
+    "db:seed": "tsx api/server/db/seed.ts"
   },
   "dependencies": {
     "@google/genai": "^2.4.0",

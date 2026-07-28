@@ -2,7 +2,7 @@ import express from 'express';
 import path from 'path';
 import { createServer as createViteServer } from 'vite';
 import { getRequestListener } from '@hono/node-server';
-import app from './server/index.js';
+import app from './api/server/index';
 
 async function startServer() {
   const server = express();
