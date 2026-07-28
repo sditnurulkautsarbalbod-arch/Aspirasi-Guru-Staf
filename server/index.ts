@@ -11,13 +11,6 @@ const app = new Hono().basePath('/api');
 app.get('/health', (c) => {
   return c.json({
     success: true,
-    message: 'Backend server/index berhasil dimuat',
-  });
-});
-
-app.get('/health', (c) => {
-  return c.json({
-    success: true,
     message: 'API Hono berhasil berjalan',
     timestamp: new Date().toISOString(),
   });
