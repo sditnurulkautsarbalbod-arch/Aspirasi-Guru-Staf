@@ -1,7 +1,7 @@
 import { Hono } from 'hono';
-import { memoryDb, isNeonConfigured, db } from '../db/index.js';
-import { aspirations } from '../db/schema.js';
-import { rateLimiter } from '../middleware/rateLimit.js';
+import { memoryDb, isNeonConfigured, db } from '../db/index';
+import { aspirations } from '../db/schema';
+import { rateLimiter } from '../middleware/rateLimit';
 
 const publicApi = new Hono();
 

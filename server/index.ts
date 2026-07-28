@@ -1,10 +1,10 @@
 import { Hono } from 'hono';
 import { cors } from 'hono/cors';
-import publicApi from './routes/public.js';
-import authApi from './routes/auth.js';
-import adminApi from './routes/admin.js';
-import wakasekApi from './routes/wakasek.js';
-import kepalaSekolahApi from './routes/kepalaSekolah.js';
+import publicApi from './routes/public';
+import authApi from './routes/auth';
+import adminApi from './routes/admin';
+import wakasekApi from './routes/wakasek';
+import kepalaSekolahApi from './routes/kepalaSekolah';
 
 const app = new Hono().basePath('/api');
 

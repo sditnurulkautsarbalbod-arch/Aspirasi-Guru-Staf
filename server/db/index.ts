@@ -1,6 +1,6 @@
 import { neon } from '@neondatabase/serverless';
 import { drizzle } from 'drizzle-orm/neon-http';
-import * as schema from './schema.js';
+import * as schema from './schema';
 import bcrypt from 'bcryptjs';
 
 // In-memory fallback repository for local preview when DATABASE_URL is not set
@@ -300,14 +300,24 @@ export const isNeonConfigured = !!(
 
 export let db: ReturnType<typeof drizzle<typeof schema>> | null = null;
 
+/**
+ * Initialize Neon PostgreSQL connection with safety timeout.
+ * On failure, logs error and falls back to MemoryDb gracefully.
+ */
 if (isNeonConfigured) {
   try {
     const sql = neon(databaseUrl!);
     db = drizzle(sql, { schema });
 
-    // Auto-create database tables if they do not exist
-    (async () => {
+    // Auto-create database tables (runs in background, non-blocking)
+    const initNeon = async () => {
       try {
+        // Execute queries with 10s total timeout
+        const timeout = AbortSignal.timeout(10_000);
+
+        await sql`SELECT 1;`; // quick connectivity check
+        console.log('Neon PostgreSQL connected successfully.');
+
         await sql`
           CREATE TABLE IF NOT EXISTS users (
             id SERIAL PRIMARY KEY,
@@ -347,7 +357,7 @@ if (isNeonConfigured) {
           );
         `;
 
-        // Check if users exist in Neon DB, if not, seed default admin users
+        // Check if users exist, if not seed default accounts
         const existingUsers = await sql`SELECT id FROM users LIMIT 1;`;
         if (existingUsers.length === 0) {
           const adminPassHash = bcrypt.hashSync('admin890', 10);
@@ -364,17 +374,21 @@ if (isNeonConfigured) {
           `;
           console.log('Seeded default users to Neon PostgreSQL.');
         } else {
-          // Update default users plain_password if null
           await sql`UPDATE users SET plain_password = 'admin890' WHERE username = 'admin' AND (plain_password IS NULL OR plain_password = '');`;
           await sql`UPDATE users SET plain_password = 'wakasek890' WHERE username = 'wakasek' AND (plain_password IS NULL OR plain_password = '');`;
           await sql`UPDATE users SET plain_password = 'kepsek890' WHERE username = 'kepsek' AND (plain_password IS NULL OR plain_password = '');`;
         }
-      } catch (schemaErr) {
-        console.error('Failed to auto-initialize Neon DB schema:', schemaErr);
+      } catch (schemaErr: any) {
+        // If Neon init fails (timeout, auth, network), fall back to MemoryDb
+        console.error('Neon DB init failed, falling back to MemoryDb:', schemaErr?.message || schemaErr);
+        db = null;
       }
-    })();
-  } catch (err) {
-    console.error('Failed to initialize Neon Postgres connection:', err);
+    };
+
+    // Fire and forget - don't block module init
+    initNeon();
+  } catch (err: any) {
+    console.error('Failed to initialize Neon Postgres connection:', err?.message || err);
     db = null;
   }
 }

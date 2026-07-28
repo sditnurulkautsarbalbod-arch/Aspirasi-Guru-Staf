@@ -1,5 +1,5 @@
 import { Hono } from 'hono';
-import { authMiddleware, requireRole, Env } from '../middleware/auth.js';
+import { authMiddleware, requireRole, Env } from '../middleware/auth';
 import {
   fetchAspirations,
   fetchAspirationById,
@@ -8,9 +8,9 @@ import {
   deleteBulkAspirations,
   deleteAllAspirations,
   exportAspirationsToExcel,
-} from '../services/aspirationService.js';
-import { memoryDb, isNeonConfigured, db } from '../db/index.js';
-import { users, audit_logs } from '../db/schema.js';
+} from '../services/aspirationService';
+import { memoryDb, isNeonConfigured, db } from '../db/index';
+import { users, audit_logs } from '../db/schema';
 import { eq } from 'drizzle-orm';
 import bcrypt from 'bcryptjs';
 

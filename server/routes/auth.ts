@@ -1,10 +1,9 @@
 import { Hono } from 'hono';
 import bcrypt from 'bcryptjs';
-import { generateToken, authMiddleware, JwtPayload, Env } from '../middleware/auth.js';
-import { memoryDb, isNeonConfigured, db } from '../db/index.js';
-import { users } from '../db/schema.js';
-import { eq } from 'drizzle-orm';
-import { rateLimiter } from '../middleware/rateLimit.js';
+import { generateToken, authMiddleware, JwtPayload, Env } from '../middleware/auth';
+import { memoryDb, isNeonConfigured, db } from '../db/index';
+import { users } from '../db/schema';
+import { rateLimiter } from '../middleware/rateLimit';
 
 const auth = new Hono<Env>();
 
