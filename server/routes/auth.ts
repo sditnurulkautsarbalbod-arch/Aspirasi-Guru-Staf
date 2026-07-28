@@ -1,5 +1,6 @@
 import { Hono } from 'hono';
 import bcrypt from 'bcryptjs';
+import { eq } from 'drizzle-orm';
 import { generateToken, authMiddleware, JwtPayload, Env } from '../middleware/auth';
 import { memoryDb, isNeonConfigured, db } from '../db/index';
 import { users } from '../db/schema';
