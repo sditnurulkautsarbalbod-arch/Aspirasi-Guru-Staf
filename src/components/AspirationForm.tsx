@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { apiRequest } from '../lib/api';
-import { Send, ShieldCheck, CheckCircle2, AlertCircle, Loader2 } from 'lucide-react';
+import { Send, CheckCircle2, AlertCircle, Loader2 } from 'lucide-react';
 
 export const AspirationForm: React.FC = () => {
   const [message, setMessage] = useState('');
@@ -98,13 +98,8 @@ export const AspirationForm: React.FC = () => {
         </h1>
 
         <p className="text-sm sm:text-base text-slate-600 dark:text-zinc-300 leading-relaxed mb-6">
-          Sampaikan pertanyaan, kritik, saran, apresiasi, atau umpan balik mengenai kondisi dan profesionalisme rekan kerja untuk keberlanjutan dan kualitas lingkungan kerja SD IT Nurul Kautsar.
+          Sampaikan pertanyaan, kritik, saran, apresiasi, atau umpan balik untuk keberlanjutan dan kualitas lingkungan kerja SD IT Nurul Kautsar.
         </p>
-
-        <div className="p-3.5 rounded-xl bg-emerald-50/80 dark:bg-emerald-950/40 border border-emerald-200/80 dark:border-emerald-800/50 flex items-center gap-3 text-xs font-medium text-emerald-900 dark:text-emerald-200">
-          <ShieldCheck className="w-5 h-5 text-emerald-600 dark:text-emerald-400 shrink-0" />
-          <span>Sistem menjamin kerahasiaan penuh. Identitas perangkat & pengirim tidak pernah direkam.</span>
-        </div>
       </div>
 
       {/* Main Form */}
@@ -117,13 +112,10 @@ export const AspirationForm: React.FC = () => {
         )}
 
         <div>
-          <div className="flex justify-between items-center mb-2">
+          <div className="mb-2">
             <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-zinc-300">
               Isi Aspirasi / Umpan Balik <span className="text-red-500">*</span>
             </label>
-            <span className="inline-flex items-center gap-1 text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-md bg-slate-100 dark:bg-zinc-800 text-slate-500 dark:text-zinc-400">
-              Kerahasiaan Terjamin
-            </span>
           </div>
 
           <textarea
